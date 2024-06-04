@@ -2,23 +2,25 @@ import fstore from './firebase'
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 
 export default async function getDataTHR () {
-  const querySnapshot = await getDocs(collection(fstore, 'dataThr'))
+  const querySnapshot = await getDocs(collection(fstore, 'cash_flow'))
   const thrs = []
   querySnapshot.forEach(doc => {
-    thrs.push({ ...doc.data(), id: doc.id })
+    console.log(doc._document.createTime.timestamp.seconds)
+    thrs.push({ ...doc.data(), id: doc.id, created_at: doc._document.createTime.timestamp.seconds })
   })
   return thrs
 }
 
-const postDataTHR = async (name, thr, keterangan) => {
-  if (!name || !thr) {
-    throw new Error('Name and THR are required')
+const postDataTHR = async (nama, nominal, keterangan, kategori) => {
+  if (!nama || !nominal || !kategori) {
+    throw new Error('Name, kategori, and THR are required')
   }
 
-  const add = await addDoc(collection(fstore, 'dataThr'), {
-    name,
-    thr,
-    keterangan
+  const add = await addDoc(collection(fstore, 'cash_flow'), {
+    nama,
+    nominal,
+    keterangan,
+    kategori
   })
 
   return add
@@ -29,7 +31,7 @@ const deleteDataTHR = async id => {
     throw new Error('ID is required')
   }
 
-  const deletedDoc = await deleteDoc(doc(fstore, 'dataThr', id))
+  const deletedDoc = await deleteDoc(doc(fstore, 'cash_flow', id))
 
   return deletedDoc
 }

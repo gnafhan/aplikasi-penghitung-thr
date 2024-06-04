@@ -11,9 +11,8 @@ const Add = () => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    console.log('aa', newData)
     try {
-      await postDataTHR(newData.name, newData.thr, newData?.keterangan ?? '-')
+      await postDataTHR(newData.nama, newData.nominal, newData?.keterangan ?? '-', newData.kategori)
       window.location.href = '/'
     } catch (error) {
       setError(error.message)
@@ -41,7 +40,7 @@ const Add = () => {
           <div className='flex w-full justify-center items-center min-h-[100vh] px-4'>
             <div className='flex w-full max-w-screen-sm shadow-lg card card-body bg-base-100'>
               <div className='flex flex-col items-center justify-center w-full gap-3 mt-3'>
-                <h1 className='text-3xl font-semibold'>Tambahkan THR 😍</h1>
+                <h1 className='text-3xl font-semibold'>Tambahkan Cashflow💸</h1>
               </div>
               <form
                 onSubmit={handleSubmit}
@@ -49,22 +48,23 @@ const Add = () => {
               >
                 <label className='w-full form-control '>
                   <div className='label'>
-                    <span className='label-text'>THR dari siapa nich😘</span>
+                    <span className='label-text'>Nama Kegiatan 🚀</span>
                   </div>
+                  
                   <input
                     required
                     type='text'
-                    placeholder='Om John'
+                    placeholder='Sangu'
                     className='w-full input input-bordered'
                     onChange={e =>
-                      setNewData({ ...newData, name: e.target.value })
+                      setNewData({ ...newData, nama: e.target.value })
                     }
                   />
                   {error && <p className='mt-1 text-sm text-error'>{error}</p>}
                 </label>
                 <label className='w-full form-control '>
                   <div className='label'>
-                    <span className='label-text'>Dapet berapa nihhh 💸</span>
+                    <span className='label-text'>Nominal 💸</span>
                   </div>
                   <input
                     type='number'
@@ -73,9 +73,22 @@ const Add = () => {
                     placeholder='100000'
                     className='w-full input input-bordered'
                     onChange={e =>
-                      setNewData({ ...newData, thr: e.target.value })
+                      setNewData({ ...newData, nominal: e.target.value })
                     }
                   />
+                  {error && <p className='mt-1 text-sm text-error'>{error}</p>}
+                </label>
+                <label className='w-full form-control '>
+                  <div className='label'>
+                    <span className='label-text'>Kategori 🛒</span>
+                  </div>
+                  <select onChange={e =>
+                      setNewData({ ...newData, kategori: e.target.value })
+                    } className="w-full select select-bordered">
+                    <option disabled selected>Income/Outcome</option>
+                    <option value={"income"} >Income</option>
+                    <option value={"outcome"}>Outcome</option>
+                  </select>
                   {error && <p className='mt-1 text-sm text-error'>{error}</p>}
                 </label>
                 <label className='w-full form-control '>
@@ -96,7 +109,7 @@ const Add = () => {
                     Cancel
                   </a>
                   <button className='btn btn-primary text-base-100'>
-                    Tambahkan THR
+                    Tambahkan Cashflow
                   </button>
                 </div>
               </form>

@@ -1,3 +1,4 @@
+import formatDate from '../util/dateFormat'
 import { deleteDataTHR } from '../util/getDataThr'
 
 /* eslint-disable react/prop-types */
@@ -23,7 +24,7 @@ const TableTHR = ({ dataTHR, setLoading, setDataTHR }) => {
           <h2 className='text-4xl font-semibold'>
             Rp{' '}
             {dataTHR
-              .reduce((prev, curr) => parseInt(curr.thr) + prev, 0)
+              .reduce((prev, curr) =>curr.kategori == "income"? parseInt(curr.nominal) + prev : prev - parseInt(curr.nominal) , 0)
               .toLocaleString('id-ID')}
           </h2>
         </div>
@@ -44,7 +45,7 @@ const TableTHR = ({ dataTHR, setLoading, setDataTHR }) => {
                   d='M12 4.5v15m7.5-7.5h-15'
                 />
               </svg> */}
-              Tambah THR
+              Tambah Cash Flow
             </a>
           </div>
           <div className='overflow-x-auto'>
@@ -53,25 +54,29 @@ const TableTHR = ({ dataTHR, setLoading, setDataTHR }) => {
               <thead>
                 <tr>
                   <th></th>
+                  <th>Tanggal</th>
                   <th>Nama</th>
-                  <th>THR</th>
+                  <th>Nominal</th>
                   <th>Keterangan</th>
+                  <th>Income/Outcome</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {/* row 1 */}
                 {dataTHR
-                  .sort((a, b) => parseInt(b.thr) - parseInt(a.thr))
+                  .sort((a, b) => parseInt(a.created_at) - parseInt(b.created_at))
                   .map((data, index) => (
                     <tr
                       key={'table row ' + index}
                       className={`${index % 2 == 0 ? 'bg-base-200' : ''}`}
                     >
                       <th>{index + 1}</th>
-                      <td>{data.name}</td>
-                      <td>{parseInt(data.thr).toLocaleString('id-ID')}</td>
+                      <td>{formatDate( data.created_at )}</td>
+                      <td>{data.nama}</td>
+                      <td>{parseInt(data.nominal).toLocaleString('id-ID')}</td>
                       <td>{data.keterangan ? data.keterangan : '-'}</td>
+                      <td>{data.kategori ? data.kategori[0].toLocaleUpperCase() + data.kategori.slice(1,999) : '-'}</td>
                       <td className='flex gap-3'>
                         {/* <button className='btn btn-primary btn-sm'>Edit</button> */}
                         <button
